@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33403.182
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContasApp.Presentation", "SistemaContas.Presentation\ContasApp.Presentation.csproj", "{11E42482-7BBD-4C7F-9A4D-824BC7967681}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContasApp.Data", "ContasApp.Data\ContasApp.Data.csproj", "{9A8210BD-F959-4A93-A9B1-54012C4C8748}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Camada de acesso a dados", "2 - Camada de acesso a dados", "{31C496DC-95A6-476A-B64A-8B1FE07CF49D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Camada de apresentação", "1 - Camada de apresentação", "{5A14D72C-4243-4810-B016-F9E5BBFB7433}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Camada de envio de mensagens", "3 - Camada de envio de mensagens", "{6E030819-A48F-4F4C-A3BF-920D5084BDBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContasApp.Messages", "ContasApp.Messages\ContasApp.Messages.csproj", "{FFA0D154-EE56-42FB-A6D2-3B6B349AC018}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{11E42482-7BBD-4C7F-9A4D-824BC7967681}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11E42482-7BBD-4C7F-9A4D-824BC7967681}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11E42482-7BBD-4C7F-9A4D-824BC7967681}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11E42482-7BBD-4C7F-9A4D-824BC7967681}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A8210BD-F959-4A93-A9B1-54012C4C8748}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A8210BD-F959-4A93-A9B1-54012C4C8748}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A8210BD-F959-4A93-A9B1-54012C4C8748}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A8210BD-F959-4A93-A9B1-54012C4C8748}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFA0D154-EE56-42FB-A6D2-3B6B349AC018}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFA0D154-EE56-42FB-A6D2-3B6B349AC018}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFA0D154-EE56-42FB-A6D2-3B6B349AC018}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFA0D154-EE56-42FB-A6D2-3B6B349AC018}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{11E42482-7BBD-4C7F-9A4D-824BC7967681} = {5A14D72C-4243-4810-B016-F9E5BBFB7433}
+		{9A8210BD-F959-4A93-A9B1-54012C4C8748} = {31C496DC-95A6-476A-B64A-8B1FE07CF49D}
+		{FFA0D154-EE56-42FB-A6D2-3B6B349AC018} = {6E030819-A48F-4F4C-A3BF-920D5084BDBA}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {47C2E04F-79C6-452E-B547-EDAB7B1B528C}
+	EndGlobalSection
+EndGlobal

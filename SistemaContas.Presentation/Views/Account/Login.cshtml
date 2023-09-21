@@ -1,0 +1,51 @@
+﻿@** Define a model que será utilizada na tela*@
+@model SistemaContas.Presentation.Models.AccountLoginViewModel
+
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-5">
+            <div class="card mt-3">
+                <div class="card-header">
+                    <div class="text-center">
+                        <h4 class="mb-2 ">Autenticar</h4>
+                        <p>Entre com os seus dados para acessar o sistema.</p>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @** Criando um formulário *@
+                    @using (Html.BeginForm())
+                    {
+                        <div class="text-center">
+                            <h5>@TempData["Mensagem"]</h5>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="Email">E-mail:</label>
+                            @Html.TextBoxFor(model => model.Email, new {@class="form-control", @placeholder="Informe seu email"})
+                            <span class="text-danger">@Html.ValidationMessageFor(model => model.Email)</span>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="Senha">Senha:</label>                            
+                            @Html.PasswordFor(model => model.Senha, new {@class="form-control", @placeholder="Informe sua senha"})
+                            <span class="text-danger">@Html.ValidationMessageFor(model => model.Senha)</span>
+                        </div>
+                        <div class="text-end mb-2">
+                            <a href="/Account/PasswordRecorver">
+                                Esqueci minha senha?
+                            </a>
+                        </div>
+                        <div class="d-grid mb-2">
+                            <button type="submit" class="btn btn-primary">Entrar</button>
+                        </div>
+
+                        <div class="d-grid mb-2">
+                            <a href="/Account/Register" class="btn btn-light">
+                                Não possui conta? <strong>Cadastre-se aqui</strong>
+                            </a>
+                        </div>
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

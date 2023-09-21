@@ -1,0 +1,98 @@
+﻿@model ContasApp.Presentation.Models.ContaConsultaViewModel
+
+@** Acessando a sessão do _AdminLayout 'styles'*@
+@section styles{
+    <link rel="stylesheet" href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+}
+
+@** Acessando a sessão do _AdminLayout 'scripts'*@
+@section scripts{
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js "></script>
+    <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#consulta_contas').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json'
+                }
+            });
+        })
+    </script>
+}
+
+<div>
+    <h5>Consulta de contas</h5>
+    <p>Listagem de contas cadastrada para o seu usuário</p>
+</div>
+
+@using (Html.BeginForm())
+{
+    <div class="row mb-2">
+        <div class="col-md-3">
+            @Html.TextBoxFor(model => model.DataInicio, new {@class="form-control", @type="date"})
+            <div class="text-danger">
+                @Html.ValidationMessageFor(model => model.DataInicio)
+            </div>
+        </div>
+        <div class="col-md-3">
+            @Html.TextBoxFor(model => model.DataFim, new {@class="form-control", @type="date"})
+            <div class="text-danger">
+                @Html.ValidationMessageFor(model => model.DataFim)
+            </div>
+        </div>
+        <div class="col-md-6">
+            <input type="submit" class="btn btn-success" value="Realizar Pesquisa" />
+        </div>
+    </div>
+}
+
+<div class="table-responsive">
+    <table id="consulta_contas" class="table table-hover table-striped table-sm">
+        <thead>
+            <tr>
+                <th>Conta</th>
+                <th>Valor</th>
+                <th>Observação</th>
+                <th>Data</th>
+                <th>Tipo</th>
+                <th>Categoria</th>
+                <th width="140">Operações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Resultado.Any())
+            {
+                @foreach (var item in Model.Resultado)
+                {
+                    <tr>
+                        <td>@item.Nome</td>
+                        <td>@item.Valor?.ToString("c")</td>
+                        <td>@item.Observacao</td>
+                        <td>@item.Data?.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            @if (item.Tipo.Equals("Receitas"))
+                            {
+                                <span class="badge bg-success">@item.Tipo</span>
+                            }
+                            else if (item.Tipo.Equals("Despesas"))
+                            {
+                                <span class="badge bg-danger">@item.Tipo</span>
+                            }
+                        </td>
+                        <td>@item.Categoria</td>
+                        <td>
+                            <a href="/Conta/Edicao/@item.ContaId" class="btn btn-outline-primary btn-sm">
+                                Editar
+                            </a>
+                            <a href="/Conta/Exclusao/@item.ContaId" class="btn btn-outline-danger btn-sm" onclick="return confirm('Deseja realmente excluir está conta?')">
+                                Excluir
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>

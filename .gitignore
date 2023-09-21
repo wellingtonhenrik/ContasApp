@@ -1,0 +1,52 @@
+# .NET and Visual Studio specific files/folders
+obj/
+bin/
+.vscode/
+.vs/
+*.userprefs
+*.suo
+*.cache
+*.dll
+*.exe
+*.pdb
+*.user
+*.bak
+*.log
+*.vsix
+*.appx
+*.appxbundle
+*.ipch/
+.vscode/
+.vs2017/
+.vs2019/
+.vs2022/
+*.swp
+[Tt]humbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# .NET project folders
+/obj/
+/bin/
+/Dotnet7App/bin/
+/Dotnet7App/obj/
+
+# Visual Studio Code settings
+.vscode/
+
+# Visual Studio settings
+.vsconfig
+
+# Rider settings
+.idea/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# NuGet Packages
+*.nuget.props
+*.nuget.targets

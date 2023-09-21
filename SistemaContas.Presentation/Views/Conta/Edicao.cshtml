@@ -1,0 +1,65 @@
+﻿@** Declarando a classe de modelo desta página*@
+@model ContasApp.Presentation.Models.ContaEdicaoViewModel;
+
+<div>
+    <h5>Edição de conta</h5>
+    <p>Edite contas para gerenciar sua vida financeira</p>
+</div>
+
+@using (Html.BeginForm())
+{
+    <div>
+        @Html.HiddenFor(a=>a.ContaId)
+    </div>
+    
+    <div class="row mb-2">
+        <div class="col-md-6">
+            <label>Nome da conta:</label>
+            @Html.TextBoxFor(model => model.Nome, new { @class = "form-control"})
+            <span>
+                @Html.ValidationMessageFor(model => model.Nome)
+            </span>
+        </div>
+
+        <div class="col-md-3">
+            <label>Data da categoria</label>
+            @Html.TextBoxFor(model => model.Data, "{0:yyyy-MM-dd}" , new {@class = "form-select", @type ="date"})
+            <div class="text-danger">
+                @Html.ValidationMessageFor(model => model.Data)
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <label>Valor da conta:</label>
+            @Html.TextBoxFor(model => model.Valor, new { @class = "form-control", @type = "number"})
+            <span>
+                @Html.ValidationMessageFor(model => model.Valor)
+            </span>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <label>Categoria da conta:</label>
+                @Html.DropDownListFor(model => model.CategoriaId, ViewBag.Categorias as List<SelectListItem>, "Escolha uma opção" , new { @class = "form-control"})
+                <div class="text-danger">
+                    @Html.ValidationMessageFor(model => model.Data)
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <label>Observação da conta:</label>
+                @Html.TextAreaFor(model => model.Observacao, new { @class = "form-control"})
+                <div class="text-danger">
+                    @Html.ValidationMessageFor(model => model.Observacao)
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-md-12">
+                <input type="submit" value="Realizar Edição" class="btn btn-primary" />
+                <a href="/Conta/Consulta" class="btn btn-light">Ir para a consulta</a>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,67 @@
+﻿@section scripts{
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+    <script>
+        // Dados para o gráfico de pizza
+        var dadosPizza = {
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: 'Exemplo de Gráfico de Pizza'
+            },
+            series: [{
+                name: 'Porcentagem',
+                data: [
+                    ['Maçãs', 45.0],
+                    ['Bananas', 25.0],
+                    ['Pêssegos', 15.0],
+                    ['Uvas', 10.0],
+                    ['Morangos', 5.0]
+                ]
+            }]
+        };
+
+        // Dados para o gráfico de barras
+        var dadosBarras = {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: 'Exemplo de Gráfico de Barras'
+            },
+            xAxis: {
+                categories: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio']
+            },
+            yAxis: {
+                title: {
+                    text: 'Vendas'
+                }
+            },
+            series: [{
+                name: 'Vendas',
+                data: [120, 150, 200, 180, 250]
+            }]
+        };
+
+        // Renderização dos gráficos
+        Highcharts.chart('chartPizza', dadosPizza);
+        Highcharts.chart('chartBarras', dadosBarras);
+    </script>
+}
+
+<div class="mb-3">
+    <h5>Dashboard Principal</h5>
+    <p>Resumo financeiro do periodo de: <strong>DATA INICIO</strong> até <strong>DATA FIM</strong></p>
+</div>   
+
+<div class="row mb-2">
+    <div class="col-md-6">
+        <div id="chartPizza"></div>
+    </div>
+    <div class="col-md-6">
+        <div id="chartBarras"></div>
+    </div>
+</div>
