@@ -1,3 +1,4 @@
+using ContasApp.Presentation.Filters;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +26,9 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
+
+//utilizando a classe que faz com que o navegador não guarde cache
+app.UseMiddleware<CacheFilter>();
 
 //Ativando o uso do Cookies
 app.UseCookiePolicy();

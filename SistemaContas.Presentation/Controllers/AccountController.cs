@@ -43,8 +43,7 @@ namespace SistemaContas.Presentation.Controllers
                     //verifica se o usuário foi encontrado
                     if (usuario is Usuario)
                     {
-                        //criando um objeto de dados que será gravado no cookie e  serializando 
-                        //para JSON
+                        //criando um objeto de dados que será gravado no cookie e  serializando para JSON                        
                         var authJson = JsonConvert.SerializeObject(new AuthViewModel()
                         {
                             Id = usuario.UsuarioId,
@@ -91,15 +90,15 @@ namespace SistemaContas.Presentation.Controllers
             try
             {
                 //Verificando se já existe um usuario com o email passado
-                //
+                
                 if (_usuarioRepository.GetByEmail(model.Email) is Usuario)
                 {
                     ModelState.AddModelError("Email", "O email informado já está cadastrado para outro usuário");
                 }
                 else
                 {
-                    //verificando se todos os campos enviados pelo model
-                    //passaram nas regras de validação
+                    //verificando se todos os campos enviados pelo model passaram nas regras de validação
+
                     if (ModelState.IsValid)
                     {
                         var usuario = new Usuario
@@ -113,7 +112,7 @@ namespace SistemaContas.Presentation.Controllers
                         _usuarioRepository.Add(usuario);
 
                         //gerando uma mensagem
-                        TempData["MensagemSucesso"] = "Parabéns, seu conta de usuário foi criada com sucesso.";
+                        TempData["MensagemSucesso"] = "Parabéns, sua conta de usuário foi criada com sucesso.";
 
                         ModelState.Clear();
                     }
