@@ -91,39 +91,26 @@ namespace ContasApp.Presentation.Controllers
             return RedirectToAction("Consulta");
         }
 
+        [HttpGet]
+        public IActionResult Consulta()
+        {
+            var model = new ContaConsultaViewModel();
+
+            //capturando o primeiro e ultimo dia do mês atual
+            var dataAtual = DateTime.Now;
+            model.DataInicio = new DateTime(dataAtual.Year, dataAtual.Month, 1);
+            model.DataFim = model.DataInicio? .AddMonths(1).AddDays(-1);
+
+            model = ConsultaContasPeridoData(model);
+            return View(model);
+        }
+
+        [HttpPost]
         public IActionResult Consulta(ContaConsultaViewModel model)
         {
-            try
+            if (ModelState.IsValid)
             {
-                ViewBag.Categorias = ObterCategorias();
-                var auth = JsonConvert.DeserializeObject<AuthViewModel>(User.Identity.Name);
-                var contas = new List<Conta>();
-                if (model.DataInicio.HasValue && model.DataFim.HasValue)
-                {
-                    contas = _contaRepository.GetByUserIdAndDatas(auth.Id, model.DataInicio, model.DataFim);
-                }
-                else
-                {
-                    contas = _contaRepository.GetByUserId(auth?.Id);
-                }
-                foreach (var item in contas)
-                {
-                    var conta = new ContasConsultaResultadoViewModel()
-                    {
-                        Tipo = item.Categoria?.Tipo.ToString(),
-                        Nome = item.Nome,
-                        Observacao = item.Observacao,
-                        Valor = item.Valor,
-                        Data = item.Data,
-                        ContaId = item.ContaId,
-                        Categoria = item.Categoria?.Nome,
-                    };
-                    model?.Resultado?.Add(conta);
-                }
-            }
-            catch (Exception ex)
-            {
-                TempData["MensagemErro"] = ex.Message;
+                model = ConsultaContasPeridoData(model);
             }
 
             return View(model);
@@ -220,6 +207,43 @@ namespace ContasApp.Presentation.Controllers
             }
 
             return list;
+        }
+        private ContaConsultaViewModel ConsultaContasPeridoData(ContaConsultaViewModel model)
+        {
+            try
+            {
+                ViewBag.Categorias = ObterCategorias();
+                var auth = JsonConvert.DeserializeObject<AuthViewModel>(User.Identity.Name);
+                var contas = new List<Conta>();
+                if (model.DataInicio.HasValue && model.DataFim.HasValue)
+                {
+                    contas = _contaRepository.GetByUserIdAndDatas(auth.Id, model.DataInicio, model.DataFim);
+                }
+                else
+                {
+                    contas = _contaRepository.GetByUserId(auth?.Id);
+                }
+                foreach (var item in contas)
+                {
+                    var conta = new ContasConsultaResultadoViewModel()
+                    {
+                        Tipo = item.Categoria?.Tipo.ToString(),
+                        Nome = item.Nome,
+                        Observacao = item.Observacao,
+                        Valor = item.Valor,
+                        Data = item.Data,
+                        ContaId = item.ContaId,
+                        Categoria = item.Categoria?.Nome,
+                    };
+                    model?.Resultado?.Add(conta);
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["MensagemErro"] = ex.Message;
+            }
+
+            return model;
         }
     }
 }

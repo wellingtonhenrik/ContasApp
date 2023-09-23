@@ -2,60 +2,145 @@
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     <script>
-        // Dados para o gráfico de pizza
-        var dadosPizza = {
-            chart: {
-                type: 'pie'
-            },
-            title: {
-                text: 'Exemplo de Gráfico de Pizza'
-            },
-            series: [{
-                name: 'Porcentagem',
-                data: [
-                    ['Maçãs', 45.0],
-                    ['Bananas', 25.0],
-                    ['Pêssegos', 15.0],
-                    ['Uvas', 10.0],
-                    ['Morangos', 5.0]
-                ]
-            }]
-        };
 
-        // Dados para o gráfico de barras
-        var dadosBarras = {
-            chart: {
-                type: 'bar'
-            },
-            title: {
-                text: 'Exemplo de Gráfico de Barras'
-            },
-            xAxis: {
-                categories: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio']
-            },
-            yAxis: {
-                title: {
-                    text: 'Vendas'
+        function formatDate(date) {
+            var day = String(date.getDate()).padStart(2, '0');
+            var month = String(date.getMonth() + 1).padStart(2, '0');
+            var year = date.getFullYear();
+
+            return year + "-" + month + "-" + day;
+        }
+
+        function consulta(dtInicio, dtFim) {
+            //Consulta com filtro
+            if (dtInicio != '' && dtFim != '') {
+                consultaContas(dtInicio, dtFim);
+            }
+            //Consulta mes atual todo
+            else {
+                alert("Por favor, selecione uma data de início e fim do período");                
+            }
+        }
+
+        function consultaContas(dtInicio, dtFim) {
+            $.ajax({
+                type: "GET",
+                url: "/Principal/ConsutarContas",
+                data: {
+                    dtInicio: dtInicio,
+                    dtFim: dtFim
+                },
+                success: function (data) { //Capturando a resposta de sucesso
+
+                    var dadosChartPizza = [];
+                    //Só renderiza graficos se encontrar dados
+
+                    for (var i = 0; i < data.totalTipos.length; i++) {
+                        var item = data.totalTipos[i];
+                        dadosChartPizza.push([item.tipo, item.total]);
+                    }
+
+                    // Dados para o gráfico de pizza
+                    var dadosPizza = {
+                        chart: {
+                            type: 'pie'
+                        },
+                        title: {
+                            text: 'Total de Receitas e Despesas'
+                        },
+                        series: [{
+                            name: 'Dados',
+                            data: dadosChartPizza
+                        }]
+                    };
+
+                    var dadosChartBarraEixoX = [];
+                    var dadosChartBarraEixoY = [];
+                    for (var i = 0; i < data.totalDespesas.length; i++) {
+                        var item = data.totalDespesas[i];
+                        dadosChartBarraEixoX.push([item.nome]);
+                        dadosChartBarraEixoY.push([item.total]);
+                    }
+                    // Dados para o gráfico de barras
+                    var dadosBarras = {
+                        chart: {
+                            type: 'bar'
+                        },
+                        title: {
+                            text: 'Total de Despesas por Categoria'
+                        },
+                        xAxis: {
+                            categories: dadosChartBarraEixoX
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Valores'
+                            }
+                        },
+                        series: [{
+                            name: 'Dados',
+                            data: dadosChartBarraEixoY
+                        }]
+                    };
+
+                    // Renderização dos gráficos
+                    Highcharts.chart('chartPizza', dadosPizza);
+                    Highcharts.chart('chartBarras', dadosBarras);
+                },
+                error: function (e) { //captura a resposta de erro
+                    console.log(e);
                 }
-            },
-            series: [{
-                name: 'Vendas',
-                data: [120, 150, 200, 180, 250]
-            }]
-        };
+            });
+        }
 
-        // Renderização dos gráficos
-        Highcharts.chart('chartPizza', dadosPizza);
-        Highcharts.chart('chartBarras', dadosBarras);
+        //inicializando o jquery
+        //quando a página abrir, faça...
+        $(document).ready(function () {
+
+            //preenchendo os campos com a data do primeir e ultimo di do mês atual
+            var dataAtual = new Date();
+            var primeiroDia = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), 1);
+            var ultimoDia = new Date(dataAtual.getFullYear(), dataAtual.getMonth() + 1, 0)
+
+            //preenchendo os campos
+            $("#dtInicio").val(formatDate(primeiroDia));
+            $("#dtFim").val(formatDate(ultimoDia));
+
+            ////traz grafico do mes atual só de abrir a tela
+            consulta(primeiroDia, ultimoDia);
+
+            //quando o botão de consulta for clicado, faça...
+            $("#btnConsulta").click(function () {
+                //capitura o valor dos campos
+                var dtInicio = $("#dtInicio").val();
+                var dtFim = $("#dtFim").val();
+
+                consulta(dtInicio, dtFim);
+            });
+        });
     </script>
 }
 
 <div class="mb-3">
     <h5>Dashboard Principal</h5>
-    <p>Resumo financeiro do periodo de: <strong>DATA INICIO</strong> até <strong>DATA FIM</strong></p>
-</div>   
+
+    <div class="row mt-3">
+        <div class="col-md-3">
+            <input type="date" id="dtInicio" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <input type="date" id="dtFim" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <button id="btnConsulta" class="btn btn-success">
+                Filtrar Dados
+            </button>
+        </div>
+    </div>
+</div>
 
 <div class="row mb-2">
     <div class="col-md-6">

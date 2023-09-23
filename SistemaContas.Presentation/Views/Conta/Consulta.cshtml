@@ -29,14 +29,14 @@
 @using (Html.BeginForm())
 {
     <div class="row mb-2">
-        <div class="col-md-3">
-            @Html.TextBoxFor(model => model.DataInicio, new {@class="form-control", @type="date"})
+        <div class="col-md-2">
+            @Html.TextBoxFor(model => model.DataInicio,"{0:yyyy-MM-dd}", new {@class="form-control", @type="date"})
             <div class="text-danger">
-                @Html.ValidationMessageFor(model => model.DataInicio)
+                @Html.ValidationMessageFor(model => model.DataInicio )
             </div>
         </div>
-        <div class="col-md-3">
-            @Html.TextBoxFor(model => model.DataFim, new {@class="form-control", @type="date"})
+        <div class="col-md-2">
+            @Html.TextBoxFor(model => model.DataFim, "{0:yyyy-MM-dd}", new {@class="form-control", @type="date"})
             <div class="text-danger">
                 @Html.ValidationMessageFor(model => model.DataFim)
             </div>
@@ -51,10 +51,10 @@
     <table id="consulta_contas" class="table table-hover table-striped table-sm">
         <thead>
             <tr>
+                <th>Data</th>
                 <th>Conta</th>
                 <th>Valor</th>
-                <th>Observação</th>
-                <th>Data</th>
+                <th>Observação</th>                
                 <th>Tipo</th>
                 <th>Categoria</th>
                 <th width="140">Operações</th>
@@ -66,10 +66,10 @@
                 @foreach (var item in Model.Resultado)
                 {
                     <tr>
+                        <td>@item.Data?.ToString("dd/MM/yyyy")</td>
                         <td>@item.Nome</td>
                         <td>@item.Valor?.ToString("c")</td>
-                        <td>@item.Observacao</td>
-                        <td>@item.Data?.ToString("dd/MM/yyyy")</td>
+                        <td>@item.Observacao</td>                        
                         <td>
                             @if (item.Tipo.Equals("Receitas"))
                             {
