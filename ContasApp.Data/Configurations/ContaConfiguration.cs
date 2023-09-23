@@ -30,7 +30,7 @@ namespace ContasApp.Data.Configurations
             builder.Property(c => c.Data).HasColumnName("DATA").HasColumnType("date").IsRequired();
 
             //mapeamento do campo Valor
-            builder.Property(c => c.Valor).HasColumnName("VALOR").HasColumnType("decimal(18,4)").IsRequired();
+            builder.Property(c => c.Valor).HasColumnName("VALOR").HasColumnType("decimal(18,2)").IsRequired();
 
             //mapeamento do campo UsuarioId
             builder.Property(c => c.UsuarioId).HasColumnName("USUARIOID").IsRequired();

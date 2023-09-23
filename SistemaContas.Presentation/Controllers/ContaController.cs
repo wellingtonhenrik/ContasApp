@@ -1,4 +1,5 @@
 ﻿using ContasApp.Data.Entities;
+using ContasApp.Data.Enums;
 using ContasApp.Data.Repositories;
 using ContasApp.Presentation.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -99,7 +100,7 @@ namespace ContasApp.Presentation.Controllers
             //capturando o primeiro e ultimo dia do mês atual
             var dataAtual = DateTime.Now;
             model.DataInicio = new DateTime(dataAtual.Year, dataAtual.Month, 1);
-            model.DataFim = model.DataInicio? .AddMonths(1).AddDays(-1);
+            model.DataFim = model.DataInicio?.AddMonths(1).AddDays(-1);
 
             model = ConsultaContasPeridoData(model);
             return View(model);
@@ -156,7 +157,7 @@ namespace ContasApp.Presentation.Controllers
                     var conta = _contaRepository.GetById(model.ContaId);
                     if (conta is null)
                         throw new Exception("Conta não encontrada");
-                    
+
                     conta.Data = model.Data;
                     conta.Observacao = model.Observacao;
                     conta.Valor = model.Valor;
@@ -234,6 +235,7 @@ namespace ContasApp.Presentation.Controllers
                         Data = item.Data,
                         ContaId = item.ContaId,
                         Categoria = item.Categoria?.Nome,
+                        StatusConta = item.StatusConta.ToString(),
                     };
                     model?.Resultado?.Add(conta);
                 }
@@ -243,7 +245,34 @@ namespace ContasApp.Presentation.Controllers
                 TempData["MensagemErro"] = ex.Message;
             }
 
+            ViewBag.StatusConta = new SelectList(Enum.GetValues(typeof(StatusConta)));
             return model;
         }
+
+
+        public JsonResult EfetivarConta(Guid id)
+        {
+            try
+            {
+                var conta = _contaRepository.GetById(id);
+                if (conta is null)
+                    return Json("Conta não encontrada");
+
+                if (conta.StatusConta == StatusConta.Paga)
+                    return Json("Conta já está paga");
+
+                conta.StatusConta = StatusConta.Paga;
+
+                _contaRepository.Update(conta);
+                ViewBag.Categorias = ObterCategorias();
+
+                return Json("Conta efetivada com sucesso");
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+        }
+
     }
 }

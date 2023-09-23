@@ -15,5 +15,6 @@ namespace ContasApp.Presentation.Models
         public string? Tipo { get; set; } 
         public decimal? Valor { get; set; }
         public string? Observacao { get; set; }  
+        public string? StatusConta { get; set; }    
     }
 }

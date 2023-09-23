@@ -11,6 +11,26 @@
     <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
     <script>
+
+        function efetivarConta(contaId) {
+            if (confirm("Deseja realmente efetivar está conta?")) {
+                $.ajax({
+                    type: "GET",
+                    url: "/Conta/EfetivarConta",
+                    data: {
+                        id: contaId
+                    },
+                    success: function (data) { //Capturando a resposta de sucesso
+                        alert(data);
+                        $("form").submit();
+                    },
+                    error: function (e) { //captura a resposta de erro
+                        alert(e);
+                    }
+                });
+            }
+        }
+
         $(document).ready(function () {
             $('#consulta_contas').DataTable({
                 language: {
@@ -54,9 +74,10 @@
                 <th>Data</th>
                 <th>Conta</th>
                 <th>Valor</th>
-                <th>Observação</th>                
+                <th>Observação</th>
                 <th>Tipo</th>
                 <th>Categoria</th>
+                <th>Status Conta</th>
                 <th width="140">Operações</th>
             </tr>
         </thead>
@@ -69,7 +90,7 @@
                         <td>@item.Data?.ToString("dd/MM/yyyy")</td>
                         <td>@item.Nome</td>
                         <td>@item.Valor?.ToString("c")</td>
-                        <td>@item.Observacao</td>                        
+                        <td>@item.Observacao</td>
                         <td>
                             @if (item.Tipo.Equals("Receitas"))
                             {
@@ -81,12 +102,16 @@
                             }
                         </td>
                         <td>@item.Categoria</td>
+                        <td>@item.StatusConta</td>
                         <td>
                             <a href="/Conta/Edicao/@item.ContaId" class="btn btn-outline-primary btn-sm">
                                 Editar
                             </a>
                             <a href="/Conta/Exclusao/@item.ContaId" class="btn btn-outline-danger btn-sm" onclick="return confirm('Deseja realmente excluir está conta?')">
                                 Excluir
+                            </a>
+                            <a class="btn btn-outline-danger btn-sm" onclick="efetivarConta('@item.ContaId')">
+                                Efetivar
                             </a>
                         </td>
                     </tr>

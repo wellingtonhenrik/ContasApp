@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ContasApp.Data.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,7 @@ namespace ContasApp.Data.Entities
         public string? Observacao { get; set; }
         public Guid? UsuarioId { get; set; }
         public Guid? CategoriaId { get; set; }
+        public StatusConta StatusConta { get; set; }
         #endregion
 
         #region Relacionamentos
