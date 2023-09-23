@@ -19,7 +19,7 @@
 
         <div class="col-md-3">
             <label>Data da categoria</label>
-            @Html.TextBoxFor(model => model.Data, new {@class = "form-select", @type ="date"})
+            @Html.TextBoxFor(model => model.Data, "{0:yyyy-MM-dd}", new {@class = "form-select", @type ="date"})
             <div class="text-danger">
                 @Html.ValidationMessageFor(model => model.Data)
             </div>
@@ -42,7 +42,15 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-3">
+                <label>Quantidade a ser criada:</label>
+                @Html.TextBoxFor(model => model.QuantidadeContasCadastrar, new { @class = "form-control", @type="number"})
+                <div class="text-danger">
+                    @Html.ValidationMessageFor(model => model.QuantidadeContasCadastrar)
+                </div>
+            </div>
+
+            <div class="col-md-3">
                 <label>Observação da conta:</label>
                 @Html.TextAreaFor(model => model.Observacao, new { @class = "form-control"})
                 <div class="text-danger">

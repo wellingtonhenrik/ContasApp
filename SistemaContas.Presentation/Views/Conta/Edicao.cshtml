@@ -11,7 +11,7 @@
     <div>
         @Html.HiddenFor(a=>a.ContaId)
     </div>
-    
+
     <div class="row mb-2">
         <div class="col-md-6">
             <label>Nome da conta:</label>
@@ -46,11 +46,19 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <label>Observação da conta:</label>
                 @Html.TextAreaFor(model => model.Observacao, new { @class = "form-control"})
                 <div class="text-danger">
                     @Html.ValidationMessageFor(model => model.Observacao)
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <label>Aplicar a todos:</label>
+                @Html.CheckBoxFor(model => model.AplicarTodas)
+                <div class="text-danger">
+                    @Html.ValidationMessageFor(model => model.AplicarTodas)
                 </div>
             </div>
         </div>

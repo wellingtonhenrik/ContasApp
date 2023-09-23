@@ -17,5 +17,8 @@ namespace ContasApp.Presentation.Models
         public string? Observacao { get; set; }
         [Required(ErrorMessage = "Informe campo {0}")]
         public decimal Valor { get; set; }
+
+        [Required(ErrorMessage = "Informe campo {0}")]
+        public int QuantidadeContasCadastrar { get; set; }
     }
 }

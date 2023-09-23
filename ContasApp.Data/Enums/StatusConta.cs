@@ -9,8 +9,8 @@ namespace ContasApp.Data.Enums
 {
     public enum StatusConta
     {
-        [Description("A Pagar")]
-        APagar = 0,
+        [Description("Pendente")]
+        Pendente = 0,
         [Description("Pagar")]
         Paga = 1,
         [Description("Paga Parcial")]

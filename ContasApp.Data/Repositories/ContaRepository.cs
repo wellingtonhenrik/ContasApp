@@ -41,5 +41,12 @@ namespace ContasApp.Data.Repositories
                 return context.Conta.Include(a => a.Categoria).Where(a => a.UsuarioId == userId && a.Data >= dataInicio && a.Data <= dataFim).OrderBy(a=>a.Data).ToList();
             }
         }
+        public List<Conta> GetListGetNomeIdCategoria(string nome, DateTime? dataConta, Guid? categoriaId, Guid? userId)
+        {
+            using (var context = new DataContext())
+            {
+                return context.Conta.Where(a => a.Nome.Equals(nome) && a.Data >= dataConta && a.CategoriaId == categoriaId && a.UsuarioId == userId).ToList();
+            }
+        }
     }
 }

@@ -110,9 +110,12 @@
                             <a href="/Conta/Exclusao/@item.ContaId" class="btn btn-outline-danger btn-sm" onclick="return confirm('Deseja realmente excluir está conta?')">
                                 Excluir
                             </a>
-                            <a class="btn btn-outline-danger btn-sm" onclick="efetivarConta('@item.ContaId')">
-                                Efetivar
-                            </a>
+                            @if (!item.StatusConta.Equals("Paga") && item.Tipo.Equals("Despesas"))
+                            {
+                                <a class="btn btn-outline-success btn-sm" onclick="efetivarConta('@item.ContaId')">
+                                    Efetivar
+                                </a>
+                            }
                         </td>
                     </tr>
                 }

@@ -1,6 +1,8 @@
-﻿using ContasApp.Data.Entities;
+﻿using Bogus.DataSets;
+using ContasApp.Data.Entities;
 using ContasApp.Data.Enums;
 using ContasApp.Data.Repositories;
+using ContasApp.Presentation.Helpers;
 using ContasApp.Presentation.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,8 +26,13 @@ namespace ContasApp.Presentation.Controllers
         //GET: Conta/Cadastro
         public IActionResult Cadastro()
         {
+            var data = DateTime.Now;
+            var mes = data.Month;
+            var ano = data.Year;
+            var model = new ContaCadastroViewModel() { QuantidadeContasCadastrar = 1, Data = new DateTime(data.Year, data.Month, 10) };
+
             ViewBag.Categorias = ObterCategorias();
-            return View();
+            return View(model);
         }
 
         [HttpPost]
@@ -36,28 +43,39 @@ namespace ContasApp.Presentation.Controllers
                 try
                 {
                     var auth = JsonConvert.DeserializeObject<AuthViewModel>(User.Identity.Name);
-                    var contaId = Guid.NewGuid();
 
-                    if (_contaRepository.GetByNomeIdCategoria(model.Nome, contaId, model.CategoriaId, auth?.Id) is Conta)
-                        throw new Exception("Já existe uma conta com este tipo");
+                    var contas = new List<Conta>();
 
-                    var conta = new Conta()
+                    var contaBase = new Conta();
+                    for (var i = 0; i < model.QuantidadeContasCadastrar; i++)
                     {
-                        ContaId = contaId,
-                        CategoriaId = model.CategoriaId,
-                        Data = model.Data,
-                        Nome = model.Nome,
-                        Observacao = model.Observacao,
-                        Valor = model.Valor,
-                        UsuarioId = auth?.Id,
+                        var conta = new Conta()
+                        {
+                            ContaId = Guid.NewGuid(),
+                            CategoriaId = model.CategoriaId,
+                            Data = model.Data?.AddMonths(i),
+                            Nome = model.Nome,
+                            Observacao = model.Observacao,
+                            Valor = model.Valor,
+                            UsuarioId = auth?.Id,
 
-                    };
+                        };
+                        contas.Add(conta);
 
-                    _contaRepository.Add(conta);
+                        //    contaBase = _contaRepository.GetByNomeIdCategoria(model.Nome, conta.ContaId, model.CategoriaId, auth?.Id);
+                        //    if (contaBase is Conta)
+                        //        throw new Exception($"Já existe uma conta com este tipo cadastrada para o mês: {MesHelper.RetornaMes(contaBase.Data?.Month)}");
+                    }
+
+                    //Deixado fora do for para que adicione todas ou nenhuma
+                    foreach (var c in contas)
+                    {
+                        _contaRepository.Add(c);
+                    }
 
                     ModelState.Clear();
 
-                    TempData["MensagemSucesso"] = $"Conta '{conta.Nome}', cadastrada com sucesso";
+                    TempData["MensagemSucesso"] = $"Conta '{model.Nome}', cadastrada com sucesso";
                 }
                 catch (Exception ex)
                 {
@@ -66,7 +84,7 @@ namespace ContasApp.Presentation.Controllers
             }
 
             ViewBag.Categorias = ObterCategorias();
-            return View();
+            return RedirectToAction("Cadastro");
         }
 
         //GET: Conta/Exclusao
@@ -157,7 +175,7 @@ namespace ContasApp.Presentation.Controllers
                     var conta = _contaRepository.GetById(model.ContaId);
                     if (conta is null)
                         throw new Exception("Conta não encontrada");
-
+                    var nomeContasAntiga = conta.Nome;
                     conta.Data = model.Data;
                     conta.Observacao = model.Observacao;
                     conta.Valor = model.Valor;
@@ -166,7 +184,22 @@ namespace ContasApp.Presentation.Controllers
                     model.ContaId = conta.ContaId;
 
                     _contaRepository.Update(conta);
+                    var auth = JsonConvert.DeserializeObject<AuthViewModel>(User.Identity.Name);
 
+                    if (model.AplicarTodas)
+                    {
+                        var contas = _contaRepository.GetListGetNomeIdCategoria(nomeContasAntiga, conta.Data?.AddMonths(1), conta.CategoriaId, auth.Id);
+
+                        foreach (var c in contas)
+                        {
+                            c.Observacao = conta.Observacao;
+                            c.Valor = conta.Valor;
+                            c.Nome = conta.Nome;
+                            c.CategoriaId = conta.CategoriaId;
+
+                            _contaRepository.Update(c);
+                        }
+                    }
                     TempData["MensagemSucesso"] = $"Conta '{conta.Nome}', editada com sucesso";
 
                 }
